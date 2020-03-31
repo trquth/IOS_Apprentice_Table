@@ -15,15 +15,22 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                         <prototypes>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" accessoryType="checkmark" indentationWidth="10" reuseIdentifier="CheckListItem" id="mDY-zi-1LE">
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" accessoryType="detailDisclosureButton" indentationWidth="10" reuseIdentifier="CheckListItem" id="mDY-zi-1LE">
                                 <rect key="frame" x="0.0" y="28" width="375" height="43.666667938232422"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="mDY-zi-1LE" id="k8l-5g-Lhv">
-                                    <rect key="frame" x="0.0" y="0.0" width="335" height="43.666667938232422"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="316" height="43.666667938232422"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
-                                        <label opaque="NO" userInteractionEnabled="NO" tag="1000" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="5kw-SQ-ZQt">
-                                            <rect key="frame" x="20" y="11" width="42" height="21"/>
+                                        <label opaque="NO" userInteractionEnabled="NO" tag="1001" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="√" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="5kw-SQ-ZQt">
+                                            <rect key="frame" x="20" y="11" width="12" height="26"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                            <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="22"/>
+                                            <nil key="textColor"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                        <label opaque="NO" userInteractionEnabled="NO" tag="1000" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="MdA-RC-kp4">
+                                            <rect key="frame" x="40" y="14" width="42" height="21"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                             <nil key="textColor"/>
@@ -31,6 +38,9 @@
                                         </label>
                                     </subviews>
                                 </tableViewCellContentView>
+                                <connections>
+                                    <segue destination="zyE-RY-wUJ" kind="show" identifier="EditItem" trigger="accessoryAction" id="vUM-m0-cuG"/>
+                                </connections>
                             </tableViewCell>
                         </prototypes>
                         <connections>
@@ -41,7 +51,7 @@
                     <navigationItem key="navigationItem" title="CheckList" id="gGd-x9-Dpd">
                         <barButtonItem key="rightBarButtonItem" systemItem="add" id="VFM-id-WGq">
                             <connections>
-                                <segue destination="zyE-RY-wUJ" kind="show" id="vXy-rm-TsX"/>
+                                <segue destination="zyE-RY-wUJ" kind="show" identifier="AddItem" id="vXy-rm-TsX"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
@@ -53,7 +63,7 @@
         <!--Title-->
         <scene sceneID="viC-v8-wH1">
             <objects>
-                <tableViewController id="zyE-RY-wUJ" customClass="AddItemVC" customModule="IOSApprenticeTable" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController id="zyE-RY-wUJ" customClass="ItemDetailVC" customModule="IOSApprenticeTable" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="grouped" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="18" sectionFooterHeight="18" id="DY6-al-KJW">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -90,7 +100,11 @@
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" title="Title" largeTitleDisplayMode="never" id="3ik-Vg-4RX">
-                        <barButtonItem key="leftBarButtonItem" systemItem="cancel" id="dZ8-aY-8rF"/>
+                        <barButtonItem key="leftBarButtonItem" systemItem="cancel" id="dZ8-aY-8rF">
+                            <connections>
+                                <action selector="cancel:" destination="zyE-RY-wUJ" id="QD1-WJ-QVj"/>
+                            </connections>
+                        </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" systemItem="done" id="4Wk-Em-DQy">
                             <connections>
                                 <action selector="done:" destination="zyE-RY-wUJ" id="N2C-fZ-jkT"/>
@@ -125,4 +139,7 @@
             <point key="canvasLocation" x="-400.00000000000006" y="47.544642857142854"/>
         </scene>
     </scenes>
+    <inferredMetricsTieBreakers>
+        <segue reference="vUM-m0-cuG"/>
+    </inferredMetricsTieBreakers>
 </document>

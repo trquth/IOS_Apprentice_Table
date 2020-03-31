@@ -8,10 +8,11 @@
 
 import UIKit
 
-class CheckListVC: UITableViewController {
+
+class CheckListVC: UITableViewController,AddItemDelegate {
     
     var items = [CheckListItem]()
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -47,16 +48,17 @@ class CheckListVC: UITableViewController {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "CheckListItem", for: indexPath)
         configureText(for: cell, at: indexPath)
-        configureCheckmark(for: cell, at: indexPath)
+        configureCheckmark(for: cell, with: items[indexPath.row])
         
         return cell
     }
-
+    
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if let cell = tableView.cellForRow(at: indexPath) {
             let item = items[indexPath.row]
             item.toggleChecked()
-            configureCheckmark(for: cell, at: indexPath )
+            configureCheckmark(for: cell, with: item )
+            configureText(for: cell, at: indexPath)
         }
         tableView.deselectRow(at: indexPath, animated: true)
     }
@@ -67,12 +69,13 @@ class CheckListVC: UITableViewController {
         tableView.deleteRows(at: indexPath, with: .automatic)
     }
     
-    func configureCheckmark(for cell: UITableViewCell, at indexPath: IndexPath) {
-        let item = items[indexPath.row]
+    //MARK:- Private method
+    func configureCheckmark(for cell: UITableViewCell, with item: CheckListItem) {
+        let label = cell.viewWithTag(1001) as! UILabel
         if item.checked {
-            cell.accessoryType = .checkmark
-        } else {
-            cell.accessoryType = .none
+            label.text  = "√"
+        }else{
+            label.text  = ""
         }
     }
     
@@ -94,6 +97,42 @@ class CheckListVC: UITableViewController {
         let indexPaths = [indexPath]
         tableView.insertRows(at: indexPaths, with: .automatic)
     }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "AddItem" {
+            let controller = segue.destination as! ItemDetailVC
+            controller.delegate = self
+        }else if segue.identifier == "EditItem" {
+            let controller = segue.destination as! ItemDetailVC
+            controller.delegate = self
+            if let indexPath = tableView.indexPath(for: sender as! UITableViewCell) {
+                controller.itemToEdit = items[indexPath.row]
+            }
+        }
+    }
+    func itemDetailVCDidCancel(_ controller: ItemDetailVC) {
+        navigationController?.popViewController(animated: true)
+    }
+    
+    func itemDetailVC(_ controller: ItemDetailVC, didFinishAdding item: CheckListItem) {
+        let newRowIndex = items.count
+        items.append(item)
+        
+        let indexPath = IndexPath(row: newRowIndex, section: 0)
+        let indexPaths = [indexPath]
+        tableView.insertRows(at: indexPaths, with: .automatic)
+        navigationController?.popViewController(animated: true)
+    }
+    
+    func itemDetailVC(_ controller: ItemDetailVC, didFinishEditing item: CheckListItem) {
+      if let index = items.index(of: item) {
+             let indexPath = IndexPath(row: index, section: 0)
+             if let cell = tableView.cellForRow(at: indexPath) {
+               configureText(for: cell, at: indexPath)
+             }
+           }
+           navigationController?.popViewController(animated:true)
+    }
 
+    
 }
-
