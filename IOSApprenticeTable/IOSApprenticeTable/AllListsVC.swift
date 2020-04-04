@@ -14,8 +14,8 @@ class AllListsVC: UITableViewController, ListDetailVCDelegate {
     }
     
     func listDetailVC(_ controller: ListDetailVC, didFinishAdding checklist: Checklist) {
-        let newRowIndex = lists.count
-        lists.append(checklist)
+        let newRowIndex = dataModel.lists.count
+        dataModel.lists.append(checklist)
         let indexPath = IndexPath(row: newRowIndex, section: 0)
         let indexPaths = [indexPath]
         tableView.insertRows(at: indexPaths, with: .automatic)
@@ -24,7 +24,7 @@ class AllListsVC: UITableViewController, ListDetailVCDelegate {
     }
     
     func listDetailVC(_ controller: ListDetailVC, didFinishEditing checklist: Checklist) {
-        if let index = lists.firstIndex(of: checklist){
+        if let index = dataModel.lists.firstIndex(of: checklist){
             let indexPath = IndexPath(row: index, section: 0)
             if let cell = tableView.cellForRow(at: indexPath) {
                 cell.textLabel!.text = checklist.name
@@ -35,34 +35,23 @@ class AllListsVC: UITableViewController, ListDetailVCDelegate {
     
     
     let cellIdentifier = "ChecklistCell"
-    var lists = [Checklist]()
+    var dataModel : DataModel!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         navigationController?.navigationBar.prefersLargeTitles = true
         
-        var list = Checklist(name: "Birthdays")
-        lists.append(list)
-        
-        list = Checklist(name: "Groceries")
-        lists.append(list)
-        
-        list = Checklist(name: "Cool Apps")
-        
-        lists.append(list)
-        
-        list = Checklist(name: "To Do")
-        lists.append(list)
-        
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: cellIdentifier)
+        
+        
     }
     
     // MARK: - Table view data source
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
-        return lists.count
+        return dataModel.lists.count
     }
     
     
@@ -79,7 +68,7 @@ class AllListsVC: UITableViewController, ListDetailVCDelegate {
        
         let cell = makeCell(for: tableView)
         
-        let checklist = lists[indexPath.row]
+        let checklist = dataModel.lists[indexPath.row]
         cell.textLabel?.text = checklist.name
         cell.accessoryType = .detailDisclosureButton
         
@@ -87,12 +76,12 @@ class AllListsVC: UITableViewController, ListDetailVCDelegate {
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let checklist = lists[indexPath.row]
+        let checklist = dataModel.lists[indexPath.row]
         performSegue(withIdentifier: "ShowChecklist", sender: checklist)
     }
     
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
-        lists.remove(at: indexPath.row)
+        dataModel.lists.remove(at: indexPath.row)
                let indexPaths =  [indexPath]
                tableView.deleteRows(at: indexPaths, with: .automatic)
     }
@@ -100,7 +89,7 @@ class AllListsVC: UITableViewController, ListDetailVCDelegate {
     override func tableView(_ tableView: UITableView, accessoryButtonTappedForRowWith indexPath: IndexPath) {
         let controller = storyboard?.instantiateViewController(identifier: "ListDetailVC") as! ListDetailVC
         controller.delegate = self
-        let checklist = lists[indexPath.row]
+        let checklist = dataModel.lists[indexPath.row]
         controller.checkListToEdit = checklist
         navigationController?.pushViewController(controller, animated: true)
         
