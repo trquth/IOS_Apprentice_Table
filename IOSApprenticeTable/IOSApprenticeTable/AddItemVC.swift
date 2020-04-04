@@ -17,7 +17,7 @@ protocol AddItemDelegate : class {
 class ItemDetailVC: UITableViewController , UITextFieldDelegate{
     
     @IBOutlet weak var textField: UITextField!
-    @IBOutlet weak var doneBarBtn: UIBarButtonItem!
+    @IBOutlet weak var doneBarButton: UIBarButtonItem!
     weak var delegate : AddItemDelegate?
     var itemToEdit: CheckListItem?
     
@@ -45,15 +45,15 @@ class ItemDetailVC: UITableViewController , UITextFieldDelegate{
         let stringRange = Range(range, in: oldText)!
         let newText = oldText.replacingCharacters(in: stringRange, with: string)
         if newText.isEmpty {
-            doneBarBtn.isEnabled = false
+            doneBarButton.isEnabled = false
         }else{
-            doneBarBtn.isEnabled = true
+            doneBarButton.isEnabled = true
         }
         return true
     }
     
     func textFieldShouldClear(_ textField: UITextField) -> Bool {
-        doneBarBtn.isEnabled = false
+        doneBarButton.isEnabled = false
         return true
     }
     
