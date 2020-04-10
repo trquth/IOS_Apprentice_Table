@@ -13,6 +13,7 @@ class DataModel {
     
     init() {
         loadChecklists()
+        registerDefaults()
     }
     
     //MARK: For file
@@ -37,6 +38,7 @@ class DataModel {
     
     func loadChecklists() {
         let path = dataFilePath()
+        print("Path \(path)")
         if let data = try? Data(contentsOf: path) {
             let decoder = PropertyListDecoder()
             do {
@@ -45,5 +47,24 @@ class DataModel {
                 print("Error decoding list array: \(error.localizedDescription)")
             }
         }
+    }
+    
+    func registerDefaults() {
+        let dictionary = ["ChecklistIndex" : -1]
+        UserDefaults.standard.register(defaults: dictionary)
+    }
+    
+    var indexOfSelectedChecklist : Int {
+        get {
+            return UserDefaults.standard.integer(forKey: "ChecklistIndex")
+        }
+        set{
+            UserDefaults.standard.set(newValue, forKey: "ChecklistIndex")
+            UserDefaults.standard.synchronize()
+        }
+    }
+    
+    func sortChecklists() {
+        lists.sort(by: {list1, list2 in return list1.name.localizedStandardCompare(list2.name) == .orderedAscending})
     }
 }
